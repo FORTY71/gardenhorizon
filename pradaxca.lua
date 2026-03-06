@@ -99,9 +99,6 @@ local function Notify(text, duration)
     end)
 end
 
---------------------------------------------------------------------------------
--- CUTE ALL-PINK CUSTOM UI LIBRARY WITH SMOOTH TRANSITIONS
---------------------------------------------------------------------------------
 local function CreateSimpleUI()
     local ui = { Tabs = {} }
     
@@ -114,7 +111,6 @@ local function CreateSimpleUI()
     pcall(function() sg.Parent = CoreGui end)
     if not sg.Parent then sg.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
-    -- Helper Function to make frames draggable
     local function MakeDraggable(guiObject)
         local dragging, dragInput, dragStart, startPos
         guiObject.InputBegan:Connect(function(input)
@@ -145,7 +141,6 @@ local function CreateSimpleUI()
         end)
     end
 
-    -- MAIN FRAME (Background Pink Soft)
     local main = Instance.new("Frame", sg)
     main.AnchorPoint = Vector2.new(0.5, 0.5)
     main.Size = UDim2.new(0, 550, 0, 380)
@@ -157,21 +152,18 @@ local function CreateSimpleUI()
     Instance.new("UICorner", main).CornerRadius = UDim.new(0, 10)
     MakeDraggable(main)
 
-    -- TOP HEADER (Slightly darker pink)
     local topBar = Instance.new("Frame", main)
     topBar.Size = UDim2.new(1, 0, 0, 50)
     topBar.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
     topBar.BorderSizePixel = 0
     Instance.new("UICorner", topBar).CornerRadius = UDim.new(0, 10)
     
-    -- Hide bottom corners of topbar
     local cover = Instance.new("Frame", main)
     cover.Size = UDim2.new(1, 0, 0, 10)
     cover.Position = UDim2.new(0, 0, 0, 40)
     cover.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
     cover.BorderSizePixel = 0
 
-    -- KONTENER TAB
     local tabContainer = Instance.new("Frame", topBar)
     tabContainer.Size = UDim2.new(1, -50, 1, 0) 
     tabContainer.BackgroundTransparency = 1
@@ -185,27 +177,21 @@ local function CreateSimpleUI()
     local topPad = Instance.new("UIPadding", tabContainer)
     topPad.PaddingLeft = UDim.new(0, 15)
 
-    -- CONTENT CONTAINER 
     local contentContainer = Instance.new("Frame", main)
     contentContainer.Size = UDim2.new(1, 0, 1, -50)
     contentContainer.Position = UDim2.new(0, 0, 0, 50)
     contentContainer.BackgroundTransparency = 1
-    contentContainer.ClipsDescendants = true -- Important for sliding tabs
+    contentContainer.ClipsDescendants = true
 
-    -- WARNA PALET
     local colorText = Color3.fromRGB(100, 50, 80)
     local colorPanelBg = Color3.fromRGB(255, 240, 246)
     local colorActive = Color3.fromRGB(255, 140, 190)
     local colorInactive = Color3.fromRGB(240, 190, 210)
 
-    -- ==============================================
-    -- FITUR OPEN/CLOSE UI (TOGGLE) WITH SMOOTH TWEEN
-    -- ==============================================
-
     local toggleUIBtn = Instance.new("TextButton", sg)
     toggleUIBtn.AnchorPoint = Vector2.new(0.5, 0.5)
     toggleUIBtn.Size = UDim2.new(0, 120, 0, 35)
-    toggleUIBtn.Position = UDim2.new(0, 75, 0.5, 0) -- Di sebelah kiri tengah
+    toggleUIBtn.Position = UDim2.new(0, 75, 0.5, 0)
     toggleUIBtn.BackgroundColor3 = colorActive
     toggleUIBtn.Text = "Open Menu"
     toggleUIBtn.Font = Enum.Font.GothamBold
@@ -229,22 +215,17 @@ local function CreateSimpleUI()
     local function ToggleUI()
         isUIOpen = not isUIOpen
         if isUIOpen then
-            -- Animate Hide Toggle Btn
             TweenService:Create(toggleUIBtn, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)}):Play()
             task.delay(0.3, function() toggleUIBtn.Visible = false end)
             
-            -- Animate Show Main UI
             main.Visible = true
             main.Size = UDim2.new(0, 0, 0, 0)
             TweenService:Create(main, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 550, 0, 380)}):Play()
         else
-            -- Animate Hide Main UI
             TweenService:Create(main, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)}):Play()
             task.delay(0.4, function() 
                 if not isUIOpen then 
                     main.Visible = false 
-                    
-                    -- Animate Show Toggle Btn
                     toggleUIBtn.Visible = true
                     toggleUIBtn.Size = UDim2.new(0, 0, 0, 0)
                     TweenService:Create(toggleUIBtn, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 120, 0, 35)}):Play()
@@ -259,10 +240,6 @@ local function CreateSimpleUI()
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if not gameProcessed and input.KeyCode == Enum.KeyCode.RightShift then ToggleUI() end
     end)
-    
-    -- ==============================================
-    -- TAB CREATION WITH SLIDE TRANSITION
-    -- ==============================================
 
     local activePage = nil
 
@@ -278,7 +255,7 @@ local function CreateSimpleUI()
 
         local page = Instance.new("ScrollingFrame", contentContainer)
         page.Size = UDim2.new(1, 0, 1, 0)
-        page.Position = UDim2.new(1, 0, 0, 0) -- Starts off-screen to the right
+        page.Position = UDim2.new(1, 0, 0, 0)
         page.BackgroundTransparency = 1
         page.Visible = false
         page.ScrollBarThickness = 5
@@ -307,14 +284,12 @@ local function CreateSimpleUI()
             tabBtn.BackgroundColor3 = colorActive
             tabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             
-            -- Slide Old Page Out (To Left)
             if activePage then
                 local oldPage = activePage
                 TweenService:Create(oldPage, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(-1, 0, 0, 0)}):Play()
                 task.delay(0.35, function() if activePage ~= oldPage then oldPage.Visible = false end end)
             end
             
-            -- Slide New Page In (From Right)
             page.Visible = true
             page.Position = UDim2.new(1, 0, 0, 0)
             TweenService:Create(page, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 0, 0, 0)}):Play()
@@ -324,7 +299,6 @@ local function CreateSimpleUI()
 
         table.insert(ui.Tabs, {Button = tabBtn, Page = page})
         
-        -- First Tab Initialization
         if #ui.Tabs == 1 then
             page.Visible = true
             page.Position = UDim2.new(0, 0, 0, 0)
@@ -382,7 +356,6 @@ local function CreateSimpleUI()
             local state = default
             btn.MouseButton1Click:Connect(function()
                 state = not state
-                -- Smooth Toggle Animation
                 TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = state and colorActive or colorInactive}):Play()
                 TweenService:Create(circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = state and UDim2.new(1, -18, 0, 2) or UDim2.new(0, 2, 0, 2)}):Play()
                 callback(state)
@@ -541,10 +514,6 @@ local function CreateSimpleUI()
     return ui, sg
 end
 
---------------------------------------------------------------------------------
--- GAME DATA & OPTIONS INIT
---------------------------------------------------------------------------------
-
 local seedOptions = {}
 local seedPriceByName = {}
 if SeedShopData and SeedShopData.ShopData then
@@ -611,16 +580,11 @@ Settings.SelectedGear = gearOptions[1]
 local selectedBuyGearsMap = {}
 local buyGearCycleIndex = 1
 
---------------------------------------------------------------------------------
--- UI CREATION
---------------------------------------------------------------------------------
-
 local UI = CreateSimpleUI()
 
 local MainTab = UI:AddTab("Main")
 local ShopTab = UI:AddTab("Shop")
 
--- ====== MAIN TAB ======
 MainTab:AddLabel("--- Auto Harvest ---")
 MainTab:AddToggle("Enable Auto Harvest", false, function(value) Settings.Enabled = value end)
 MainTab:AddToggle("Ignore Favorited", true, function(value) Settings.IgnoreFavorited = value end)
@@ -664,7 +628,6 @@ MainTab:AddButton("Save Plant Position", function()
     SavedPositionLabel.Text = string.format("Saved Position: X %.2f | Y %.2f | Z %.2f", root.Position.X, root.Position.Y, root.Position.Z)
 end)
 
--- ====== SHOP TAB ======
 ShopTab:AddLabel("--- Seed Shop ---")
 ShopTab:AddDropdown("Seed", seedOptions, true, function(value)
     selectedBuySeedsMap = {}
@@ -731,10 +694,6 @@ ShopTab:AddSlider("Auto Sell Delay (s)", 0.1, 10.0, Settings.AutoSellDelay, func
 ShopTab:AddButton("Buy Selected Seed", function() tryBuyNextSelectedSeed(false) end)
 ShopTab:AddButton("Buy Selected Gear", function() tryBuyNextSelectedGear(false) end)
 ShopTab:AddButton("Sell Now", function() trySell(Settings.SellMode, false) end)
-
---------------------------------------------------------------------------------
--- LOGIC & FUNCTIONS 
---------------------------------------------------------------------------------
 
 local function getCharacterRoot()
     local char = LocalPlayer.Character
@@ -1502,9 +1461,6 @@ local function autoClaimQuests()
     end
 end
 
---------------------------------------------------------------------------------
--- MAIN LOOP
---------------------------------------------------------------------------------
 task.spawn(function()
     while task.wait(Settings.Delay) do
         local ok, err = pcall(function()

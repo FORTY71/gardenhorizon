@@ -159,7 +159,8 @@ local function CreateSimpleUI()
     bgImage.Position = UDim2.new(0, 0, 0, 0)
     bgImage.BackgroundTransparency = 0
     bgImage.BackgroundColor3 = Color3.fromRGB(255, 224, 235)
-    bgImage.Image = "rbxassetid://98044031821548" -- Texture ID yang diminta
+    -- Menggunakan ID yang baru diberikan
+    bgImage.Image = "rbxassetid://95101112877359" 
     bgImage.ScaleType = Enum.ScaleType.Crop
     bgImage.ZIndex = 0
     Instance.new("UICorner", bgImage).CornerRadius = UDim.new(0, 10)

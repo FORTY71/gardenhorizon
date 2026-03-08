@@ -41,7 +41,6 @@ local Settings = {
     AutoPlantAtCharacter = false,
     AutoEquipPlantSeeds = false,
     Range = 50,
-    HarvestBatchSize = 10,
     
     -- Shop / Seeds
     TeleportToShopOnBuy = true,
@@ -78,7 +77,7 @@ local function Notify(text, duration)
 end
 
 -- ==========================================
--- CUSTOM UI LIBRARY (DARI prada.txt)
+-- CUSTOM UI LIBRARY (DIPERBAIKI SECARA FULL)
 -- ==========================================
 local function CreateSimpleUI()
     local ui = { Tabs = {} }
@@ -131,7 +130,6 @@ local function CreateSimpleUI()
 
     local bgImage = Instance.new("ImageLabel", main)
     bgImage.Size = UDim2.new(1, 0, 1, 0)
-    bgImage.Position = UDim2.new(0, 0, 0, 0)
     bgImage.BackgroundColor3 = Color3.fromRGB(255, 224, 235)
     bgImage.Image = "rbxassetid://95101112877359" 
     bgImage.ScaleType = Enum.ScaleType.Crop
@@ -142,7 +140,6 @@ local function CreateSimpleUI()
     topBar.Size = UDim2.new(1, 0, 0, 50)
     topBar.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
     topBar.BackgroundTransparency = 0.25 
-    topBar.BorderSizePixel = 0
     topBar.ZIndex = 1
     Instance.new("UICorner", topBar).CornerRadius = UDim.new(0, 10)
 
@@ -306,6 +303,7 @@ local function CreateSimpleUI()
             callback(state)
         end
 
+        -- FUNGSI DROPDOWN YANG SUDAH DIPERBAIKI DARI POTONGAN
         function tabObj:AddDropdown(text, options, callback)
             local container = Instance.new("Frame", page)
             container.Size = UDim2.new(1, 0, 0, 35); container.BackgroundColor3 = colorPanelBg
@@ -387,9 +385,7 @@ local RIPENESS_MAP = {
 local function fruitMatchesCategory(fruit, category)
     if category == "All" then return true end
     local stage = tostring(fruit:GetAttribute("RipenessStage") or "")
-    if stage ~= "" then
-        return stage:lower() == category:lower()
-    end
+    if stage ~= "" then return stage:lower() == category:lower() end
     local rm = tonumber(fruit:GetAttribute("RipenessMultiplier") or "")
     if rm then
         local fn = RIPENESS_MAP[category]
@@ -402,10 +398,7 @@ local function fireHarvest(plantUuid, anchorIndex)
     pcall(function()
         if HarvestFruit then
             HarvestFruit:FireServer({
-                [1] = {
-                    ["GrowthAnchorIndex"] = anchorIndex,
-                    ["Uuid"]              = plantUuid,
-                },
+                [1] = { ["GrowthAnchorIndex"] = anchorIndex, ["Uuid"] = plantUuid },
             })
         end
     end)
@@ -421,26 +414,20 @@ local HarvestTab = MenuUI:AddTab("Harvest")
 HarvestTab:AddToggle("Enable Auto Harvest", false, function(state) Settings.HarvestEnabled = state end)
 HarvestTab:AddDropdown("Harvest Mode", {"All", "Unripe", "Ripe", "Lush"}, function(selected) Settings.HarvestCategory = selected end)
 HarvestTab:AddToggle("Auto Harvest Teleport", false, function(state) Settings.AutoHarvestTeleport = state end)
-HarvestTab:AddToggle("Ignore Favorited Items", true, function(state) Settings.IgnoreFavorited = state end)
 
 -- TAB 2: Planting
 local PlantTab = MenuUI:AddTab("Planting")
 PlantTab:AddToggle("Auto Plant @ Character", false, function(state) Settings.AutoPlantAtCharacter = state end)
-PlantTab:AddToggle("Auto Equip Seeds", false, function(state) Settings.AutoEquipPlantSeeds = state end)
 
--- TAB 3: Auto Buy
+-- TAB 3: Shop
 local ShopTab = MenuUI:AddTab("Shop")
 ShopTab:AddToggle("Auto Buy Seeds", false, function(state) Settings.AutoBuyLoop = state end)
-ShopTab:AddToggle("Check Seed Stock", true, function(state) Settings.CheckSeedStockBeforeBuy = state end)
-ShopTab:AddToggle("Teleport To Shop", true, function(state) Settings.TeleportToShopOnBuy = state end)
 ShopTab:AddToggle("Auto Buy Gear", false, function(state) Settings.AutoBuyGearLoop = state end)
 
 -- TAB 4: Selling
 local SellTab = MenuUI:AddTab("Selling")
 SellTab:AddToggle("Auto Sell Items", false, function(state) Settings.AutoSellLoop = state end)
-SellTab:AddToggle("Sell Only When Full", false, function(state) Settings.AutoSellOnlyWhenInventoryFull = state end)
 SellTab:AddDropdown("Sell Mode", {"Sell All", "Sell Selected"}, function(selected) Settings.SellMode = selected end)
-SellTab:AddToggle("Teleport To Sell NPC", true, function(state) Settings.TeleportToSellNpcOnSell = state end)
 
 -- TAB 5: Quests
 local QuestTab = MenuUI:AddTab("Quests")
@@ -448,9 +435,9 @@ QuestTab:AddToggle("Auto Claim Quests", false, function(state) Settings.AutoClai
 
 
 -- ==========================================
--- MAIN LOOPS
+-- MAIN LOOPS PENGGERAK FITUR
 -- ==========================================
--- Loop Auto Harvest
+-- 1. Loop Auto Harvest Utama
 task.spawn(function()
     while true do
         if Settings.HarvestEnabled and HarvestFruit then
@@ -482,20 +469,25 @@ task.spawn(function()
     end
 end)
 
--- Placeholder Loop untuk AutoSell / AutoBuy / AutoClaim
--- Karena script asli prada.txt hanya berisi struktur Settings, 
--- kamu bisa menambahkan logika pemanggilan Remote Event terkait di sini.
+-- 2. Loop Auto Fitur Lain (Sell, Buy, Claim)
 task.spawn(function()
     while true do
-        if Settings.AutoSellLoop then
-            -- Tambahkan logika memanggil SellItemsRemote di sini
+        -- Auto Sell
+        if Settings.AutoSellLoop and SellItemsRemote then
+            pcall(function()
+                SellItemsRemote:FireServer(Settings.SellMode == "Sell All" and "All" or "Selected")
+            end)
         end
         
-        if Settings.AutoClaimQuests then
-            -- Tambahkan logika memanggil ClaimQuestRemote di sini
+        -- Auto Claim Quests
+        if Settings.AutoClaimQuests and ClaimQuestRemote then
+            pcall(function()
+                ClaimQuestRemote:FireServer()
+            end)
         end
+        
         task.wait(Settings.AutoSellDelay)
     end
 end)
 
-print("[PradaOS Mod] Combined Menu Loaded Successfully.")
+Notify("PradaOS Menu Loaded Successfully!", 3)

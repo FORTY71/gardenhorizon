@@ -152,6 +152,16 @@ local function CreateSimpleUI()
     Instance.new("UICorner", main).CornerRadius = UDim.new(0, 10)
     MakeDraggable(main)
 
+    -- Penambahan Background Image dengan ID yang diminta
+    local bgImage = Instance.new("ImageLabel", main)
+    bgImage.Name = "CustomBackground"
+    bgImage.Size = UDim2.new(1, 0, 1, 0)
+    bgImage.Position = UDim2.new(0, 0, 0, 0)
+    bgImage.BackgroundTransparency = 1
+    bgImage.Image = "rbxassetid://98044031821548"
+    bgImage.ScaleType = Enum.ScaleType.Crop
+    bgImage.ZIndex = 0
+
     local topBar = Instance.new("Frame", main)
     topBar.Size = UDim2.new(1, 0, 0, 50)
     topBar.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
@@ -488,7 +498,7 @@ local function CreateSimpleUI()
                         end
                         optBtn.TextColor3 = colorActive
                         optBtn.Font = Enum.Font.GothamBold
-                        btn.Text = "  " .. text .. ": " .. opt
+                        btn.Text = "  " .. text .. ": " .. options[1]
                         open = false
                         TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 0, 35)}):Play()
                         callback(selected)

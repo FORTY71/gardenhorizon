@@ -146,7 +146,7 @@ local function CreateSimpleUI()
     main.Size = UDim2.new(0, 550, 0, 380)
     main.Position = UDim2.new(0.5, 0, 0.5, 0)
     main.BackgroundColor3 = Color3.fromRGB(255, 224, 235)
-    main.BackgroundTransparency = 1 -- Dibuat transparan agar image bg terlihat
+    main.BackgroundTransparency = 1 
     main.BorderSizePixel = 0
     main.Active = true
     main.ClipsDescendants = true
@@ -159,7 +159,6 @@ local function CreateSimpleUI()
     bgImage.Position = UDim2.new(0, 0, 0, 0)
     bgImage.BackgroundTransparency = 0
     bgImage.BackgroundColor3 = Color3.fromRGB(255, 224, 235)
-    -- Menggunakan ID yang baru diberikan
     bgImage.Image = "rbxassetid://95101112877359" 
     bgImage.ScaleType = Enum.ScaleType.Crop
     bgImage.ZIndex = 0
@@ -168,7 +167,7 @@ local function CreateSimpleUI()
     local topBar = Instance.new("Frame", main)
     topBar.Size = UDim2.new(1, 0, 0, 50)
     topBar.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
-    topBar.BackgroundTransparency = 0.25 -- Sedikit transparan
+    topBar.BackgroundTransparency = 0.25 
     topBar.BorderSizePixel = 0
     topBar.ZIndex = 1
     Instance.new("UICorner", topBar).CornerRadius = UDim.new(0, 10)
@@ -177,7 +176,7 @@ local function CreateSimpleUI()
     cover.Size = UDim2.new(1, 0, 0, 10)
     cover.Position = UDim2.new(0, 0, 0, 40)
     cover.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
-    cover.BackgroundTransparency = 0.25 -- Sedikit transparan
+    cover.BackgroundTransparency = 0.25 
     cover.BorderSizePixel = 0
     cover.ZIndex = 1
 
@@ -207,17 +206,15 @@ local function CreateSimpleUI()
     local colorActive = Color3.fromRGB(255, 140, 190)
     local colorInactive = Color3.fromRGB(240, 190, 210)
 
-    local toggleUIBtn = Instance.new("TextButton", sg)
+    -- Toggle Button Diubah Menjadi ImageButton
+    local toggleUIBtn = Instance.new("ImageButton", sg)
     toggleUIBtn.AnchorPoint = Vector2.new(0.5, 0.5)
-    toggleUIBtn.Size = UDim2.new(0, 120, 0, 35)
-    toggleUIBtn.Position = UDim2.new(0, 75, 0.5, 0)
-    toggleUIBtn.BackgroundColor3 = colorActive
-    toggleUIBtn.Text = "Open Menu"
-    toggleUIBtn.Font = Enum.Font.GothamBold
-    toggleUIBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    toggleUIBtn.TextSize = 13
+    toggleUIBtn.Size = UDim2.new(0, 50, 0, 50) -- Ukuran normal
+    toggleUIBtn.Position = UDim2.new(0, 50, 0.5, 0)
+    toggleUIBtn.BackgroundTransparency = 1 -- Transparan agar gambar dominan
+    toggleUIBtn.Image = "rbxassetid://126475933417799"
+    toggleUIBtn.ScaleType = Enum.ScaleType.Fit
     toggleUIBtn.Visible = false
-    Instance.new("UICorner", toggleUIBtn).CornerRadius = UDim.new(0, 8)
     MakeDraggable(toggleUIBtn)
 
     local minimizeBtn = Instance.new("TextButton", topBar)
@@ -248,7 +245,8 @@ local function CreateSimpleUI()
                     main.Visible = false 
                     toggleUIBtn.Visible = true
                     toggleUIBtn.Size = UDim2.new(0, 0, 0, 0)
-                    TweenService:Create(toggleUIBtn, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 120, 0, 35)}):Play()
+                    -- Ukuran balikan Tween disesuaikan ke ukuran icon normal (50x50)
+                    TweenService:Create(toggleUIBtn, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 50, 0, 50)}):Play()
                 end 
             end)
         end
@@ -339,7 +337,7 @@ local function CreateSimpleUI()
             lbl.Size = UDim2.new(1, 0, 0, 25)
             lbl.BackgroundTransparency = 1
             lbl.Text = text
-            lbl.TextColor3 = Color3.fromRGB(255, 255, 255) -- Supaya terbaca di background
+            lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
             lbl.Font = Enum.Font.GothamBold
             lbl.TextSize = 15
             lbl.TextXAlignment = Enum.TextXAlignment.Left
@@ -351,7 +349,7 @@ local function CreateSimpleUI()
             local container = Instance.new("Frame", page)
             container.Size = UDim2.new(1, 0, 0, 35)
             container.BackgroundColor3 = colorPanelBg
-            container.BackgroundTransparency = 0.35 -- Dibuat tembus pandang
+            container.BackgroundTransparency = 0.35
             container.ZIndex = 4
             Instance.new("UICorner", container).CornerRadius = UDim.new(0, 8)
 
@@ -408,7 +406,7 @@ local function CreateSimpleUI()
             local container = Instance.new("Frame", page)
             container.Size = UDim2.new(1, 0, 0, 55)
             container.BackgroundColor3 = colorPanelBg
-            container.BackgroundTransparency = 0.35 -- Dibuat tembus pandang
+            container.BackgroundTransparency = 0.35
             container.ZIndex = 4
             Instance.new("UICorner", container).CornerRadius = UDim.new(0, 8)
 
@@ -466,7 +464,7 @@ local function CreateSimpleUI()
             local container = Instance.new("Frame", page)
             container.Size = UDim2.new(1, 0, 0, 35)
             container.BackgroundColor3 = colorPanelBg
-            container.BackgroundTransparency = 0.35 -- Dibuat tembus pandang
+            container.BackgroundTransparency = 0.35
             container.ClipsDescendants = true
             container.ZIndex = 4
             Instance.new("UICorner", container).CornerRadius = UDim.new(0, 8)

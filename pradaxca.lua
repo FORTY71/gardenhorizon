@@ -146,37 +146,44 @@ local function CreateSimpleUI()
     main.Size = UDim2.new(0, 550, 0, 380)
     main.Position = UDim2.new(0.5, 0, 0.5, 0)
     main.BackgroundColor3 = Color3.fromRGB(255, 224, 235)
+    main.BackgroundTransparency = 1 -- Dibuat transparan agar image bg terlihat
     main.BorderSizePixel = 0
     main.Active = true
     main.ClipsDescendants = true
     Instance.new("UICorner", main).CornerRadius = UDim.new(0, 10)
     MakeDraggable(main)
 
-    -- Penambahan Background Image dengan ID yang diminta
     local bgImage = Instance.new("ImageLabel", main)
     bgImage.Name = "CustomBackground"
     bgImage.Size = UDim2.new(1, 0, 1, 0)
     bgImage.Position = UDim2.new(0, 0, 0, 0)
-    bgImage.BackgroundTransparency = 1
-    bgImage.Image = "rbxassetid://98044031821548"
+    bgImage.BackgroundTransparency = 0
+    bgImage.BackgroundColor3 = Color3.fromRGB(255, 224, 235)
+    bgImage.Image = "rbxassetid://98044031821548" -- Texture ID yang diminta
     bgImage.ScaleType = Enum.ScaleType.Crop
     bgImage.ZIndex = 0
+    Instance.new("UICorner", bgImage).CornerRadius = UDim.new(0, 10)
 
     local topBar = Instance.new("Frame", main)
     topBar.Size = UDim2.new(1, 0, 0, 50)
     topBar.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
+    topBar.BackgroundTransparency = 0.25 -- Sedikit transparan
     topBar.BorderSizePixel = 0
+    topBar.ZIndex = 1
     Instance.new("UICorner", topBar).CornerRadius = UDim.new(0, 10)
     
     local cover = Instance.new("Frame", main)
     cover.Size = UDim2.new(1, 0, 0, 10)
     cover.Position = UDim2.new(0, 0, 0, 40)
     cover.BackgroundColor3 = Color3.fromRGB(255, 192, 216)
+    cover.BackgroundTransparency = 0.25 -- Sedikit transparan
     cover.BorderSizePixel = 0
+    cover.ZIndex = 1
 
     local tabContainer = Instance.new("Frame", topBar)
     tabContainer.Size = UDim2.new(1, -50, 1, 0) 
     tabContainer.BackgroundTransparency = 1
+    tabContainer.ZIndex = 2
 
     local tabLayout = Instance.new("UIListLayout", tabContainer)
     tabLayout.FillDirection = Enum.FillDirection.Horizontal
@@ -192,6 +199,7 @@ local function CreateSimpleUI()
     contentContainer.Position = UDim2.new(0, 0, 0, 50)
     contentContainer.BackgroundTransparency = 1
     contentContainer.ClipsDescendants = true
+    contentContainer.ZIndex = 2
 
     local colorText = Color3.fromRGB(100, 50, 80)
     local colorPanelBg = Color3.fromRGB(255, 240, 246)
@@ -219,6 +227,7 @@ local function CreateSimpleUI()
     minimizeBtn.Font = Enum.Font.GothamBold
     minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     minimizeBtn.TextSize = 20
+    minimizeBtn.ZIndex = 3
     Instance.new("UICorner", minimizeBtn).CornerRadius = UDim.new(0, 6)
 
     local isUIOpen = true
@@ -261,6 +270,7 @@ local function CreateSimpleUI()
         tabBtn.Font = Enum.Font.GothamBold
         tabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
         tabBtn.TextSize = 13
+        tabBtn.ZIndex = 3
         Instance.new("UICorner", tabBtn).CornerRadius = UDim.new(0, 8)
 
         local page = Instance.new("ScrollingFrame", contentContainer)
@@ -272,6 +282,7 @@ local function CreateSimpleUI()
         page.ScrollBarImageColor3 = colorActive
         page.AutomaticCanvasSize = Enum.AutomaticSize.Y
         page.CanvasSize = UDim2.new(0, 0, 0, 0)
+        page.ZIndex = 3
 
         local list = Instance.new("UIListLayout", page)
         list.SortOrder = Enum.SortOrder.LayoutOrder
@@ -327,10 +338,11 @@ local function CreateSimpleUI()
             lbl.Size = UDim2.new(1, 0, 0, 25)
             lbl.BackgroundTransparency = 1
             lbl.Text = text
-            lbl.TextColor3 = colorText
+            lbl.TextColor3 = Color3.fromRGB(255, 255, 255) -- Supaya terbaca di background
             lbl.Font = Enum.Font.GothamBold
             lbl.TextSize = 15
             lbl.TextXAlignment = Enum.TextXAlignment.Left
+            lbl.ZIndex = 4
             return lbl
         end
 
@@ -338,6 +350,8 @@ local function CreateSimpleUI()
             local container = Instance.new("Frame", page)
             container.Size = UDim2.new(1, 0, 0, 35)
             container.BackgroundColor3 = colorPanelBg
+            container.BackgroundTransparency = 0.35 -- Dibuat tembus pandang
+            container.ZIndex = 4
             Instance.new("UICorner", container).CornerRadius = UDim.new(0, 8)
 
             local lbl = Instance.new("TextLabel", container)
@@ -346,21 +360,24 @@ local function CreateSimpleUI()
             lbl.BackgroundTransparency = 1
             lbl.Text = text
             lbl.TextColor3 = colorText
-            lbl.Font = Enum.Font.Gotham
+            lbl.Font = Enum.Font.GothamBold
             lbl.TextSize = 14
             lbl.TextXAlignment = Enum.TextXAlignment.Left
+            lbl.ZIndex = 5
 
             local btn = Instance.new("TextButton", container)
             btn.Size = UDim2.new(0, 40, 0, 20)
             btn.Position = UDim2.new(1, -50, 0.5, -10)
             btn.BackgroundColor3 = default and colorActive or colorInactive
             btn.Text = ""
+            btn.ZIndex = 5
             Instance.new("UICorner", btn).CornerRadius = UDim.new(1, 0)
             
             local circle = Instance.new("Frame", btn)
             circle.Size = UDim2.new(0, 16, 0, 16)
             circle.Position = default and UDim2.new(1, -18, 0, 2) or UDim2.new(0, 2, 0, 2)
             circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            circle.ZIndex = 6
             Instance.new("UICorner", circle).CornerRadius = UDim.new(1, 0)
 
             local state = default
@@ -381,6 +398,7 @@ local function CreateSimpleUI()
             btn.TextColor3 = Color3.fromRGB(255, 255, 255)
             btn.Font = Enum.Font.GothamBold
             btn.TextSize = 14
+            btn.ZIndex = 4
             Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
             btn.MouseButton1Click:Connect(callback)
         end
@@ -389,6 +407,8 @@ local function CreateSimpleUI()
             local container = Instance.new("Frame", page)
             container.Size = UDim2.new(1, 0, 0, 55)
             container.BackgroundColor3 = colorPanelBg
+            container.BackgroundTransparency = 0.35 -- Dibuat tembus pandang
+            container.ZIndex = 4
             Instance.new("UICorner", container).CornerRadius = UDim.new(0, 8)
 
             local lbl = Instance.new("TextLabel", container)
@@ -397,9 +417,10 @@ local function CreateSimpleUI()
             lbl.BackgroundTransparency = 1
             lbl.Text = text .. ": " .. tostring(default)
             lbl.TextColor3 = colorText
-            lbl.Font = Enum.Font.Gotham
+            lbl.Font = Enum.Font.GothamBold
             lbl.TextSize = 14
             lbl.TextXAlignment = Enum.TextXAlignment.Left
+            lbl.ZIndex = 5
 
             local bar = Instance.new("TextButton", container)
             bar.Size = UDim2.new(1, -20, 0, 8)
@@ -407,11 +428,13 @@ local function CreateSimpleUI()
             bar.BackgroundColor3 = colorInactive
             bar.Text = ""
             bar.AutoButtonColor = false
+            bar.ZIndex = 5
             Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
             local fill = Instance.new("Frame", bar)
             fill.Size = UDim2.new(math.clamp((default - min) / (max - min), 0, 1), 0, 1, 0)
             fill.BackgroundColor3 = colorActive
+            fill.ZIndex = 6
             Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
 
             local dragging = false
@@ -442,7 +465,9 @@ local function CreateSimpleUI()
             local container = Instance.new("Frame", page)
             container.Size = UDim2.new(1, 0, 0, 35)
             container.BackgroundColor3 = colorPanelBg
+            container.BackgroundTransparency = 0.35 -- Dibuat tembus pandang
             container.ClipsDescendants = true
+            container.ZIndex = 4
             Instance.new("UICorner", container).CornerRadius = UDim.new(0, 8)
 
             local btn = Instance.new("TextButton", container)
@@ -453,6 +478,7 @@ local function CreateSimpleUI()
             btn.Font = Enum.Font.GothamBold
             btn.TextSize = 13
             btn.TextXAlignment = Enum.TextXAlignment.Left
+            btn.ZIndex = 5
 
             local list = Instance.new("UIListLayout", container)
             list.SortOrder = Enum.SortOrder.LayoutOrder
@@ -471,12 +497,14 @@ local function CreateSimpleUI()
                 local optBtn = Instance.new("TextButton", container)
                 optBtn.Size = UDim2.new(1, 0, 0, 30)
                 optBtn.BackgroundColor3 = colorPanelBg
+                optBtn.BackgroundTransparency = 1
                 optBtn.Text = "  " .. opt
                 optBtn.TextColor3 = colorText
                 optBtn.Font = Enum.Font.Gotham
                 optBtn.TextSize = 13
                 optBtn.TextXAlignment = Enum.TextXAlignment.Left
                 optBtn.BorderSizePixel = 0
+                optBtn.ZIndex = 5
 
                 optBtn.MouseButton1Click:Connect(function()
                     if multi then
